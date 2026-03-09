@@ -33,27 +33,31 @@ else
     ping_status="FAIL"
 fi
 
-#HTTP Check
+# HTTP Status
 http_status=$(curl -o /dev/null -s -w "%{http_code}" https://$website)
 
-# RESPONSE TIME
+# Response Time
 response_time=$(curl -o /dev/null -s -w "%{time_total}" https://$website)
 
-# ALERT LOGIC STARTS HERE
+# ALERT
 if [[ "$http_status" == "000" || "$http_status" =~ ^[45][0-9]{2}$ ]]; then
     bash alert.sh "🚨 Website DOWN: $website (HTTP $http_status)"
 fi
 
-# Display logic – kept almost identical, just cleaner spacing
-if [[ "$http_status" == "200" || "$http_status" == "301" || "$http_status" == "302" || "$http_status" == "304" ]]; then
-    echo -e "$website ${GREEN}UP${RESET} ${response_time}s"
+# STATUS TEXT
+if [[ "$http_status" == "200" || "$http_status" == "301" || "$http_status" == "302" ]]
+then
+    status="UP"
+    echo -e "$timestamp | $website | UP | ${response_time}s" | tee -a $LOG_FILE
 else
-    echo -e "$website ${RED}DOWN${RESET} (HTTP $http_status)"
+    status="DOWN"
+    echo -e "$timestamp | $website | DOWN | HTTP $http_status" | tee -a $LOG_FILE
 fi
 
+# INSERT INTO DATABASE
 sqlite3 $DB <<EOF
-INSERT INTO monitor(website,timestamp,dns,ping,http_status,response_time)
-VALUES('$website','$timestamp','$dns_status','$ping_status','$http_status','$response_time');
+INSERT INTO monitor (website,timestamp,dns,ping,http_status,response_time)
+VALUES ('$website','$timestamp','$dns_status','$ping_status','$http_status','$response_time');
 EOF
 
 done < $WEBSITE_FILE

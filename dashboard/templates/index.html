@@ -47,6 +47,84 @@ font-weight:bold;
 
 <h2>Website Monitoring Dashboard</h2>
 
+<canvas id="responseChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+fetch("/response-data")
+.then(res => res.json())
+.then(data => {
+
+    const ctx = document.getElementById('responseChart').getContext('2d');
+
+    const colors = [
+        "red",
+        "blue",
+        "green",
+        "orange",
+        "purple",
+        "brown"
+    ];
+
+    let datasets = [];
+    let labels = [];
+
+    let i = 0;
+
+    for (const website in data) {
+
+        if (labels.length === 0) {
+            labels = data[website].timestamps;
+        }
+
+        datasets.push({
+            label: website,
+            data: data[website].response,
+            borderColor: colors[i % colors.length],
+            borderWidth: 2,
+            fill: false
+        });
+
+        i++;
+    }
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top"
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Response Time (seconds)"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Timestamp"
+                    }
+                }
+            }
+        }
+    });
+
+});
+
+</script>
+
 <table border="1">
 
 <tr>
@@ -77,6 +155,9 @@ DOWN
 {% endfor %}
 
 </table>
+
+</body>
+</html>
 
 </body>
 </html>
