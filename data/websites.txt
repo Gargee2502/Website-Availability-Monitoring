@@ -1,0 +1,10 @@
+google.com
+facebook.com
+instagram.com
+github.com
+thiswebsitedoesnotexist12345.com
+stackoverflow.com
+wikipedia.org
+fakewebsite987654321.org
+example.com
+randomtestdomainabcxyz.net

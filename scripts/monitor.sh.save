@@ -1,0 +1,63 @@
+#!/bin/bash
+
+WEBSITE_FILE="../data/websites.txt"
+LOG_FILE="../logs/monitor.log"
+
+echo "===== Website Availability Check : $(date) =====" >> $LOG_FILE
+
+while read website
+do
+
+timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+
+# Check response time
+response=$(curl -o /dev/null -s -w "%{time_total}" https://$website)
+
+# Check if website reachable
+ping -c 1 $website > /dev/null 2>&1
+if [ "$http_status" == "200" ]
+then
+    web_status="UP"
+else
+    web_status="DOWN"
+fi
+
+
+# DNS Check
+dns_check=$(nslookup $website 2>/dev/null)
+if echo "$dns_check" | grep -q "Address"
+then
+    dns_status="OK"
+else
+    dns_status="FAIL"
+fi
+
+# Ping Check
+ping -c 1 $website > /dev/null 2>&1
+if [ $? -eq 0 ]
+then
+    ping_status="OK"
+else
+    ping_status="FAIL"
+fi
+
+#HTTP Check
+http_status=$(curl -o /dev/null -s -w "%{http_code}" https://$website)
+if [ "$http_status" == "200" ]
+then
+    web_status="UP"
+else
+    web_status="DOWN"
+fi
+
+if [ $? -eq 0 ]
+then
+    status="UP"
+else
+    status="DOWN"
+    response="Timeout"
+fi
+
+echo "$timestamp | $website | $status | $response s" >> $LOG_FILE
+
+done < $WEBSITE_FILE

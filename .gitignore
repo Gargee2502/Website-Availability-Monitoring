@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.db
+logs/
+status/
+ssh_key
+ssh_key.pub
+*.log
+.env

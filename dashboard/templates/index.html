@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Website Monitor</title>
+<meta http-equiv="refresh" content="10">
+</head>
+
+<body>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f8;
+margin:40px;
+}
+
+table{
+border-collapse:collapse;
+width:100%;
+background:white;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+th{
+background:#222;
+color:white;
+padding:12px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #eee;
+}
+
+.up{
+color:green;
+font-weight:bold;
+}
+
+.down{
+color:red;
+font-weight:bold;
+}
+
+</style>
+
+<h2>Website Monitoring Dashboard</h2>
+
+<table border="1">
+
+<tr>
+<th>Website</th>
+<th>Time</th>
+<th>Status</th>
+<th>Response Time</th>
+</tr>
+
+{% for row in data %}
+
+<tr>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+
+<td>
+{% if row[2] == 200 %}
+UP
+{% else %}
+DOWN
+{% endif %}
+</td>
+
+<td>{{row[3]}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
