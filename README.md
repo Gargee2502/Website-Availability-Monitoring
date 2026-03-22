@@ -50,7 +50,7 @@ website-monitor/
 ├── requirements.txt # Python dependencies
 ├── .gitignore
 └── README.md
-
+```
 ---
 
 ## How the System Works
@@ -73,54 +73,54 @@ website-monitor/
 ```bash
 git clone https://github.com/Gargee2502/Website-Availability-Monitoring.git
 cd website-monitor
-
+```
 ### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
-
-### 3. Add Websites
+```
+3. Add Websites
 Edit:
-```bash
+```markdown
 data/websites.txt
-
+```
 Example:
-```bash
+```markdown
 google.com
 github.com
 example.com
-
+```
 ### 4. Configure Telegram Alerts
 Edit:
-```bash
+```markdown
 scripts/alert.sh
-
+```
 Add:
-```bash
+```markdown
 BOT_TOKEN=your_bot_token
 CHAT_ID=your_chat_id
-
+```
 ### 5. Run Monitoring Script
 ```bash
 cd scripts
 chmod +x monitor.sh
 ./monitor.sh
-
+```
 ### 6. Start Dashboard
 ```bash
 python app.py
-
+```
 Open:
-```bash
+```markdown
 http://localhost:5000
-
+```
 ### 7. Automate with Cron (Optional)
 ```bash
 crontab -e
-
+```
 Add:
 ```bash
 * * * * * /path-to-project/scripts/monitor.sh
-
+```
 ---
 
 ## Dashboard
